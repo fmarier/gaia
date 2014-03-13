@@ -23,6 +23,11 @@ var ContactsTest = {
     return this.getButton = document.getElementById('get-contacts');
   },
 
+  get pushButton() {
+    delete this.pushButton;
+    return this.pushButton = document.getElementById('push-contacts');
+  },
+
   get pickActivityButton() {
     delete this.pickActivityButton;
     return this.pickActivityButton = document.getElementById('activities-pick');
@@ -67,6 +72,7 @@ var ContactsTest = {
     this.loadButton.addEventListener('click', this.loadContacts.bind(this));
     this.clearButton.addEventListener('click', this.clearContacts.bind(this));
     this.getButton.addEventListener('click', this.getContacts.bind(this));
+    this.pushButton.addEventListener('click', this.pushContacts.bind(this));
     this.pickActivityButton.addEventListener('click',
                         this.pickActivity.bind(this));
     this.newActivityButton.addEventListener('click',
@@ -91,6 +97,7 @@ var ContactsTest = {
     this.clearButton.removeEventListener('click',
                                       this.clearContacts.bind(this));
     this.getButton.removeEventListener('click', this.getContacts.bind(this));
+    this.pushButton.removeEventListener('click', this.pushContacts.bind(this));
     this.newActivityButton.removeEventListener('click',
                                       this.newActivity.bind(this));
     this.updateExistingActivityButton.removeEventListener('click',
@@ -126,6 +133,33 @@ var ContactsTest = {
     req.onerror = function() {
       alert('Problem receiving contacts');
     };
+  },
+
+  pushContacts: function ct_pushContacts() {
+    const CONTACTS_URL = 'http://localhost/owncloud/remote.php/carddav/addressbooks/francois/contacts';
+    const CONTACTS_USERNAME = 'francois';
+    const CONTACTS_PASSWORD = 'francois';
+
+    function reqListener() {
+      alert('Contacts pushed: ' + this.responseText);
+    }
+
+    var oReq = new XMLHttpRequest({ mozSystem: true });
+    oReq.onload = reqListener;
+    oReq.open("PUT", CONTACTS_URL + '/sample.vcf', true, CONTACTS_USERNAME, CONTACTS_PASSWORD);
+    oReq.setRequestHeader('Content-Type', 'text/vcard; charset=utf-8');
+    oReq.send(
+'BEGIN:VCARD\r\
+VERSION:3.0\r\
+UID:c653477fb0\r\
+PRODID:-//ownCloud//NONSGML Contacts 0.2.5//EN\r\
+REV:2014-03-12T01:55:24+00:00\r\
+CATEGORIES:Friends\r\
+FN:Elvis Gratton\r\
+N:Gratton;Elvis;;;\r\
+NICKNAME:Bob\r\
+END:VCARD'
+    );
   },
 
   setContactId: function ct_setContactId(id) {

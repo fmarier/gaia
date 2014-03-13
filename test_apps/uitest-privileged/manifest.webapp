@@ -20,6 +20,7 @@
     "device-storage:pictures":{ "access": "readwrite" },
     "device-storage:sdcard":{ "access": "readwrite" },
     "device-storage:videos":{ "access": "readwrite" },
+    "systemXHR": { "description": "Allows pushing contacts to CardDAV servers" },
     "geolocation":{}
   }
 }
