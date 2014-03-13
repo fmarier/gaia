@@ -141,7 +141,7 @@ var ContactsTest = {
     const CONTACTS_PASSWORD = 'francois';
 
     function reqListener() {
-      alert('Contacts pushed: ' + this.responseText);
+      alert('Contacts pushed: ' + this.responseText); // TODO: why are this.responseText and oReq.responseType empty?
     }
 
     var oReq = new XMLHttpRequest({ mozSystem: true });
