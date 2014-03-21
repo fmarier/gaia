@@ -136,19 +136,18 @@ var ContactsTest = {
   },
 
   pushContacts: function ct_pushContacts() {
-    const CONTACTS_URL = 'http://localhost/owncloud/remote.php/carddav/addressbooks/francois/contacts';
-    const CONTACTS_USERNAME = 'francois';
-    const CONTACTS_PASSWORD = 'francois';
-
     function reqListener() {
       alert('Contacts pushed: ' + this.responseText); // TODO: why are this.responseText and oReq.responseType empty?
     }
 
-    var oReq = new XMLHttpRequest({ mozSystem: true });
-    oReq.onload = reqListener;
-    oReq.open("PUT", CONTACTS_URL + '/sample.vcf', true, CONTACTS_USERNAME, CONTACTS_PASSWORD);
-    oReq.setRequestHeader('Content-Type', 'text/vcard; charset=utf-8');
-    oReq.send(
+    SettingsHelper('services.fxaccounts.contacts.url').get(function on_ct_get_url(url) {
+      SettingsHelper('services.fxaccounts.contacts.username').get(function on_ct_get_username(username) {
+        SettingsHelper('services.fxaccounts.contacts.password').get(function on_ct_get_password(password) {
+          var oReq = new XMLHttpRequest({ mozSystem: true });
+          oReq.onload = reqListener;
+          oReq.open("PUT", url + '/sample.vcf', true, username, password);
+          oReq.setRequestHeader('Content-Type', 'text/vcard; charset=utf-8');
+          oReq.send(
 'BEGIN:VCARD\r\
 VERSION:3.0\r\
 UID:c653477fb0\r\
@@ -159,7 +158,10 @@ FN:Elvis Gratton\r\
 N:Gratton;Elvis;;;\r\
 NICKNAME:Bob\r\
 END:VCARD'
-    );
+          );
+        });
+      });
+    });
   },
 
   setContactId: function ct_setContactId(id) {
