@@ -137,6 +137,7 @@ var ContactsTest = {
 
   pushContacts: function ct_pushContacts() {
     function reqListener() {
+      console.log("Contacts pushed: " + this.responseText);
       alert('Contacts pushed: ' + this.responseText); // TODO: why are this.responseText and oReq.responseType empty?
     }
 
@@ -145,7 +146,9 @@ var ContactsTest = {
         SettingsHelper('services.fxaccounts.contacts.password').get(function on_ct_get_password(password) {
           var oReq = new XMLHttpRequest({ mozSystem: true });
           oReq.onload = reqListener;
-          oReq.open("PUT", url + '/sample.vcf', true, username, password);
+          var fullURL = url + '/sample.vcf';
+          console.log("Pushing contacts to:" + fullURL);
+          oReq.open("PUT", fullURL, true, username, password);
           oReq.setRequestHeader('Content-Type', 'text/vcard; charset=utf-8');
           oReq.send(
 'BEGIN:VCARD\r\
